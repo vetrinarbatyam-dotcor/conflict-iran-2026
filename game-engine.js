@@ -93,23 +93,23 @@ class GameEngine {
 
     // ---- DIPLOMACY ----
     improveRelations(countryId) {
-        if (this.state.budget < 0.5) return { success: false, msg: 'תקציב לא מספיק' };
+        if (this.state.budget < 0.5) return { success: false, msg: t('budget_insufficient') };
         this.state.budget -= 0.5;
         const change = Math.floor(Math.random() * 10) + 5;
         this.state.relations[countryId].value = Math.min(100, this.state.relations[countryId].value + change);
         this.state.relations[countryId].trend = 1;
-        return { success: true, msg: `יחסים עם ${GAME_DATA.countries[countryId].name} השתפרו ב-${change}` };
+        return { success: true, msg: t('relations_improved').replace('{0}', getName(GAME_DATA.countries[countryId])).replace('{1}', change) };
     }
 
     worsenRelations(countryId) {
         const change = Math.floor(Math.random() * 15) + 5;
         this.state.relations[countryId].value = Math.max(-100, this.state.relations[countryId].value - change);
         this.state.relations[countryId].trend = -1;
-        return { success: true, msg: `יחסים עם ${GAME_DATA.countries[countryId].name} הורעו ב-${change}` };
+        return { success: true, msg: t('relations_worsened').replace('{0}', getName(GAME_DATA.countries[countryId])).replace('{1}', change) };
     }
 
     declareWar(countryId) {
-        if (this.state.relations[countryId].atWar) return { success: false, msg: 'כבר במלחמה' };
+        if (this.state.relations[countryId].atWar) return { success: false, msg: t('already_at_war') };
         this.state.relations[countryId].atWar = true;
         this.state.relations[countryId].value = -100;
         this.state.atWar.push(countryId);
@@ -118,26 +118,26 @@ class GameEngine {
         if (countryId !== 'iran') {
             this.state.relations.usa && (this.state.relations.usa.value -= 10);
         }
-        return { success: true, msg: `הוכרזה מלחמה על ${GAME_DATA.countries[countryId].name}!` };
+        return { success: true, msg: t('war_declared').replace('{0}', getName(GAME_DATA.countries[countryId])) };
     }
 
     seekPeace(countryId) {
-        if (!this.state.relations[countryId].atWar) return { success: false, msg: 'לא במלחמה' };
+        if (!this.state.relations[countryId].atWar) return { success: false, msg: t('not_at_war') };
         const chance = 30 + (this.state.relations.usa ? this.state.relations.usa.value / 4 : 0);
         if (Math.random() * 100 < chance) {
             this.state.relations[countryId].atWar = false;
             this.state.atWar = this.state.atWar.filter(c => c !== countryId);
             this.state.relations[countryId].value = -20;
-            return { success: true, msg: `הסכם הפסקת אש עם ${GAME_DATA.countries[countryId].name}!` };
+            return { success: true, msg: t('ceasefire_accepted').replace('{0}', getName(GAME_DATA.countries[countryId])) };
         }
-        return { success: false, msg: `${GAME_DATA.countries[countryId].name} דוחה הצעת שלום` };
+        return { success: false, msg: t('ceasefire_rejected').replace('{0}', getName(GAME_DATA.countries[countryId])) };
     }
 
     // ---- MILITARY ----
     purchaseUnit(unitId, quantity) {
         const unit = GAME_DATA.units[unitId];
         const cost = unit.cost * quantity;
-        if (this.state.budget < cost) return { success: false, msg: 'תקציב לא מספיק' };
+        if (this.state.budget < cost) return { success: false, msg: t('budget_insufficient') };
         this.state.budget -= cost;
         if (unit.delivery === 0) {
             this.state.forces[unitId].count += quantity;
@@ -146,7 +146,7 @@ class GameEngine {
             this.state.forces[unitId].incomingTurns = unit.delivery;
         }
         this.recalcMilitary();
-        return { success: true, msg: `הוזמנו ${quantity} ${unit.name}. אספקה: ${unit.delivery} חודשים` };
+        return { success: true, msg: t('units_ordered').replace('{0}', quantity).replace('{1}', getName(unit)).replace('{2}', unit.delivery) };
     }
 
     recalcMilitary() {
@@ -188,16 +188,16 @@ class GameEngine {
             GAME_DATA.countries[countryId].military = Math.max(0, GAME_DATA.countries[countryId].military - 2);
             this.state.militaryVictories++;
             this.state.approval = Math.min(100, this.state.approval + 8);
-            return { success: true, msg: `מבצע צבאי נגד ${GAME_DATA.countries[countryId].name} הצליח! צבא האויב נפגע.` };
+            return { success: true, msg: t('attack_success').replace('{0}', getName(GAME_DATA.countries[countryId])) };
         } else {
             this.state.approval = Math.max(0, this.state.approval - 10);
-            return { success: false, msg: `מבצע צבאי נגד ${GAME_DATA.countries[countryId].name} נכשל. נגרמו אבדות.` };
+            return { success: false, msg: t('attack_failed').replace('{0}', getName(GAME_DATA.countries[countryId])) };
         }
     }
 
     airStrike(countryId) {
         const aircraft = this.state.forces.aircraft.count;
-        if (aircraft < 2) return { success: false, msg: 'אין מספיק מטוסי קרב' };
+        if (aircraft < 2) return { success: false, msg: t('not_enough_aircraft') };
 
         this.state.budget -= 1.5;
         const chance = 50 + aircraft * 3;
@@ -206,18 +206,18 @@ class GameEngine {
         if (success) {
             GAME_DATA.countries[countryId].military = Math.max(0, GAME_DATA.countries[countryId].military - 1);
             this.state.relations[countryId].value = Math.max(-100, this.state.relations[countryId].value - 20);
-            return { success: true, msg: `תקיפה אווירית על ${GAME_DATA.countries[countryId].name} הצליחה!` };
+            return { success: true, msg: t('airstrike_success').replace('{0}', getName(GAME_DATA.countries[countryId])) };
         } else {
             this.state.forces.aircraft.count--;
             this.recalcMilitary();
-            return { success: false, msg: `תקיפה אווירית נכשלה. מטוס הופל.` };
+            return { success: false, msg: t('airstrike_failed') };
         }
     }
 
     // ---- INTELLIGENCE ----
     executeIntelOp(opId, targetCountry) {
         const op = GAME_DATA.intelOps[opId];
-        if (this.state.budget < op.cost) return { success: false, msg: 'תקציב לא מספיק' };
+        if (this.state.budget < op.cost) return { success: false, msg: t('budget_insufficient') };
         this.state.budget -= op.cost;
 
         const bonusFromCyber = this.state.forces.cyber ? this.state.forces.cyber.count * 3 : 0;
@@ -233,44 +233,44 @@ class GameEngine {
                 case 'spy':
                     const intel = this.generateIntelReport(targetCountry);
                     this.state.intelReports.push(intel);
-                    result.msg = `ריגול הצליח! ${intel}`;
+                    result.msg = t('spy_success').replace('{0}', intel);
                     break;
                 case 'sabotage':
                     GAME_DATA.countries[targetCountry].military = Math.max(0, GAME_DATA.countries[targetCountry].military - 1);
-                    result.msg = `חבלה הצליחה! צבא ${GAME_DATA.countries[targetCountry].name} נפגע.`;
+                    result.msg = t('sabotage_success').replace('{0}', getName(GAME_DATA.countries[targetCountry]));
                     break;
                 case 'cyberAttack':
                     GAME_DATA.countries[targetCountry].stability -= 5;
-                    result.msg = `מתקפת סייבר הצליחה! תשתיות ${GAME_DATA.countries[targetCountry].name} נפגעו.`;
+                    result.msg = t('cyber_success').replace('{0}', getName(GAME_DATA.countries[targetCountry]));
                     break;
                 case 'fundRebels':
                     GAME_DATA.countries[targetCountry].stability -= 10;
-                    result.msg = `מימון מורדים הצליח! אי-יציבות ב${GAME_DATA.countries[targetCountry].name} גוברת.`;
+                    result.msg = t('rebels_success').replace('{0}', getName(GAME_DATA.countries[targetCountry]));
                     break;
                 case 'assassination':
                     GAME_DATA.countries[targetCountry].stability -= 20;
                     GAME_DATA.countries[targetCountry].military -= 1;
-                    result.msg = `חיסול ממוקד הצליח! מנהיג צבאי של ${GAME_DATA.countries[targetCountry].name} חוסל.`;
+                    result.msg = t('assassination_success').replace('{0}', getName(GAME_DATA.countries[targetCountry]));
                     break;
                 case 'propaganda':
                     GAME_DATA.countries[targetCountry].stability -= 8;
-                    result.msg = `לוחמה פסיכולוגית הצליחה! מחאות ב${GAME_DATA.countries[targetCountry].name}.`;
+                    result.msg = t('propaganda_success').replace('{0}', getName(GAME_DATA.countries[targetCountry]));
                     break;
                 case 'nuclearSabotage':
                     if (targetCountry === 'iran') {
                         this.state.iranNuclear = Math.max(0, this.state.iranNuclear - 20);
-                        result.msg = `חבלה גרעינית הצליחה! תוכנית הגרעין האיראנית נפגעה קשות!`;
+                        result.msg = t('nuclear_sabotage_success');
                     }
                     break;
             }
         } else {
-            result.msg = `מבצע ${op.name} נכשל.`;
+            result.msg = t('op_failed').replace('{0}', getName(op));
         }
 
         if (detected) {
             this.state.relations[targetCountry].value = Math.max(-100, this.state.relations[targetCountry].value - 15);
             if (this.state.relations.usa) this.state.relations.usa.value -= 5;
-            result.msg += ` ⚠️ המבצע נחשף! יחסים הורעו.`;
+            result.msg += ' ' + t('op_exposed');
         }
 
         return result;
@@ -279,20 +279,20 @@ class GameEngine {
     generateIntelReport(countryId) {
         const country = GAME_DATA.countries[countryId];
         const reports = [
-            `${country.name}: צבא ברמה ${country.military}, יציבות ${country.stability}%`,
-            `${country.name}: מתכננים רכש נשק חדש`,
-            `${country.name}: מתחים פנימיים גוברים, יציבות ${country.stability}%`,
+            t('intel_report_1').replace('{0}', getName(country)).replace('{1}', country.military).replace('{2}', country.stability),
+            t('intel_report_2').replace('{0}', getName(country)),
+            t('intel_report_3').replace('{0}', getName(country)).replace('{1}', country.stability),
         ];
         if (countryId === 'iran') {
-            reports.push(`איראן: תוכנית גרעינית ב-${this.state.iranNuclear}% התקדמות`);
+            reports.push(t('intel_report_4').replace('{0}', this.state.iranNuclear));
         }
         return reports[Math.floor(Math.random() * reports.length)];
     }
 
     // ---- NUCLEAR ----
     fundNuclear(amount) {
-        if (this.state.budget < amount) return { success: false, msg: 'תקציב לא מספיק' };
-        if (this.state.nuclearProgress >= 100) return { success: false, msg: 'תוכנית גרעינית הושלמה' };
+        if (this.state.budget < amount) return { success: false, msg: t('budget_insufficient') };
+        if (this.state.nuclearProgress >= 100) return { success: false, msg: t('nuclear_complete') };
         this.state.budget -= amount;
         this.state.nuclearFunding = amount;
 
@@ -301,9 +301,9 @@ class GameEngine {
         if (Math.random() * 100 < advanceChance) {
             const advance = Math.floor(Math.random() * 8) + 3;
             this.state.nuclearProgress = Math.min(100, this.state.nuclearProgress + advance);
-            return { success: true, msg: `התקדמות גרעינית! +${advance}% (סה"כ ${this.state.nuclearProgress}%)` };
+            return { success: true, msg: t('nuclear_advance').replace('{0}', advance).replace('{1}', this.state.nuclearProgress) };
         }
-        return { success: true, msg: `מחקר נמשך. אין פריצת דרך החודש.` };
+        return { success: true, msg: t('nuclear_no_progress') };
     }
 
     // ---- TURN PROCESSING ----
@@ -320,7 +320,7 @@ class GameEngine {
         // 2. War costs
         this.state.atWar.forEach(c => {
             this.state.budget -= 2;
-            results.push(`💸 עלות מלחמה עם ${GAME_DATA.countries[c].name}: -$2B`);
+            results.push(t('war_cost').replace('{0}', getName(GAME_DATA.countries[c])));
         });
 
         // 3. Deliveries
@@ -329,7 +329,7 @@ class GameEngine {
                 f.incomingTurns--;
                 if (f.incomingTurns <= 0) {
                     f.count += f.incoming;
-                    results.push(`📦 ${GAME_DATA.units[id].name}: ${f.incoming} יחידות הגיעו!`);
+                    results.push(t('units_arrived').replace('{0}', getName(GAME_DATA.units[id])).replace('{1}', f.incoming));
                     f.incoming = 0;
                 }
             }
@@ -342,7 +342,7 @@ class GameEngine {
                 const advance = Math.floor(Math.random() * 5) + 1;
                 this.state.iranNuclear = Math.min(100, this.state.iranNuclear + advance);
                 if (this.state.iranNuclear >= 100) {
-                    results.push('☢️ אזהרה קריטית: איראן השלימה פצצה גרעינית!');
+                    results.push(t('iran_nuke_complete_warning'));
                 }
             }
         } else {
@@ -362,7 +362,7 @@ class GameEngine {
         if (this.state.budget < 0) {
             this.state.stability -= 5;
             this.state.approval -= 5;
-            results.push('⚠️ גירעון תקציבי! יציבות ואישור יורדים.');
+            results.push(t('budget_deficit'));
         }
 
         // Saudi: Vision 2030 natural progress
@@ -387,10 +387,10 @@ class GameEngine {
                 if (Math.random() < 0.3) {
                     this.state.gameOver = true;
                     this.state.gameResult = 'assassinated';
-                    results.push('💀 ניסיון התנקשות הצליח!');
+                    results.push(t('assassination_success_turn'));
                 } else {
                     this.state.approval += 15; // Sympathy
-                    results.push('🎯 ניסיון התנקשות נכשל! גל אהדה.');
+                    results.push(t('assassination_failed_turn'));
                 }
             }
         }
@@ -427,7 +427,7 @@ class GameEngine {
                     this.state.budget -= actualDamage;
                     this.state.approval -= 3;
                 }
-                results.push(`🚀 איראן שיגרה ${damage} טילים. ${intercepted} יורטו. נזק: $${actualDamage}B`);
+                results.push(t('iran_missiles').replace('{0}', damage).replace('{1}', intercepted).replace('{2}', actualDamage));
             }
         }
 
@@ -436,10 +436,10 @@ class GameEngine {
             if (Math.random() < 0.25) {
                 const intercepted = this.state.forces.ironDome ? this.state.forces.ironDome.count > 0 : false;
                 if (intercepted) {
-                    results.push('🛡️ חות\'ים שיגרו מל"טים. הגנות אוויריות יירטו.');
+                    results.push(t('houthi_intercepted'));
                 } else {
                     this.state.budget -= 1;
-                    results.push('💥 חות\'ים פגעו במתקן נפט! נזק: $1B');
+                    results.push(t('houthi_hit'));
                 }
             }
         }
@@ -454,7 +454,7 @@ class GameEngine {
                     this.state.approval -= 3;
                     this.state.budget -= 0.5;
                 }
-                results.push(`🚀 חיזבאללה שיגר ${rockets} רקטות. כיפת ברזל יירטה ${interceptRate}%.`);
+                results.push(t('hezbollah_rockets').replace('{0}', rockets).replace('{1}', interceptRate));
             }
         }
 
@@ -462,7 +462,7 @@ class GameEngine {
         if (this.state.relations.usa) {
             if (this.state.atWar.length > 2) {
                 this.state.relations.usa.value -= 3;
-                results.push('🇺🇸 ארה"ב מבעת דאגה ממספר החזיתות.');
+                results.push(t('us_concern'));
             }
         }
 
@@ -471,7 +471,7 @@ class GameEngine {
             if (country.stability < 20 && Math.random() < 0.1) {
                 country.stability -= 10;
                 if (country.stability <= 0) {
-                    results.push(`🏴 ${country.name} קרסה! הממשלה נפלה.`);
+                    results.push(t('country_collapsed').replace('{0}', getName(country)));
                     if (this.state.relations[id]) {
                         this.state.relations[id].value = 0;
                         this.state.relations[id].atWar = false;

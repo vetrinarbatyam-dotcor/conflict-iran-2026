@@ -4,6 +4,29 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
+/* Language Toggle Button */
+.lang-toggle {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 9999;
+    background: rgba(17, 24, 39, 0.9);
+    border: 2px solid var(--accent-cyan);
+    color: var(--accent-cyan);
+    font-family: 'Orbitron', monospace;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 1px;
+}
+.lang-toggle:hover {
+    background: var(--accent-cyan);
+    color: var(--bg-dark);
+}
+
 :root {
     --bg-dark: #0a0e17;
     --bg-panel: #111827;

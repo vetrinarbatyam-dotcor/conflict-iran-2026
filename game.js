@@ -9,7 +9,9 @@ const LEADER_CARDS_DATA = {
         name: 'ראש ממשלת ישראל',
         nameEn: 'Prime Minister of Israel',
         stats: ['💰 תקציב: $18B', '⚔️ צבא: 7 חטיבות', '☢️ גרעין: מתקדם', '🕵️ מודיעין: מוסד'],
+        statsEn: ['💰 Budget: $18B', '⚔️ Army: 7 Brigades', '☢️ Nuclear: Advanced', '🕵️ Intel: Mossad'],
         challenge: 'נטרל את הגרעין האיראני, הגן מפרוקסים, שמור על ברית ארה"ב',
+        challengeEn: 'Neutralize Iranian nuclear program, defend from proxies, maintain US alliance',
         difficulty: '★★★☆☆'
     },
     saudi: {
@@ -18,7 +20,9 @@ const LEADER_CARDS_DATA = {
         name: 'יורש העצר של סעודיה',
         nameEn: 'Crown Prince of Saudi Arabia',
         stats: ['💰 תקציב: $50B', '⚔️ צבא: 5 חטיבות', '☢️ גרעין: בפיתוח', '🕵️ מודיעין: GIP'],
+        statsEn: ['💰 Budget: $50B', '⚔️ Army: 5 Brigades', '☢️ Nuclear: Developing', '🕵️ Intel: GIP'],
         challenge: 'הכל את החות\'ים, בלום את איראן, קדם Vision 2030, אזן בין ארה"ב לסין',
+        challengeEn: 'Contain the Houthis, block Iran, advance Vision 2030, balance US and China',
         difficulty: '★★★★☆'
     },
     iran: {
@@ -27,7 +31,9 @@ const LEADER_CARDS_DATA = {
         name: 'נשיא איראן',
         nameEn: 'President of Iran',
         stats: ['💰 תקציב: $25B', '⚔️ צבא: 8 חטיבות', '☢️ גרעין: 85%', '🕵️ מודיעין: VAJA'],
+        statsEn: ['💰 Budget: $25B', '⚔️ Army: 8 Brigades', '☢️ Nuclear: 85%', '🕵️ Intel: VAJA'],
         challenge: 'הגן על תוכנית הגרעין, נהל פרוקסים, שרוד סנקציות, בלום את ארה"ב וישראל',
+        challengeEn: 'Protect nuclear program, manage proxies, survive sanctions, block US and Israel',
         difficulty: '★★★★☆'
     },
     usa: {
@@ -36,7 +42,9 @@ const LEADER_CARDS_DATA = {
         name: 'נשיא ארה"ב',
         nameEn: 'President of the United States',
         stats: ['💰 תקציב: $100B', '⚔️ צבא: 50 חטיבות', '☢️ גרעין: מתקדם', '🕵️ מודיעין: CIA'],
+        statsEn: ['💰 Budget: $100B', '⚔️ Army: 50 Brigades', '☢️ Nuclear: Advanced', '🕵️ Intel: CIA'],
         challenge: 'נטרל גרעין איראני, נהל בריתות, אזן בית/חוץ, בחירות 2028',
+        challengeEn: 'Neutralize Iranian nuclear, manage alliances, balance domestic/foreign, 2028 elections',
         difficulty: '★★☆☆☆'
     },
     hezbollah: {
@@ -45,7 +53,9 @@ const LEADER_CARDS_DATA = {
         name: 'מנהיג חיזבאללה',
         nameEn: 'Leader of Hezbollah',
         stats: ['💰 תקציב: $5B', '⚔️ צבא: 2 חטיבות', '☢️ גרעין: אין', '🕵️ מודיעין: חיזבאללה'],
+        statsEn: ['💰 Budget: $5B', '⚔️ Army: 2 Brigades', '☢️ Nuclear: None', '🕵️ Intel: Hezbollah'],
         challenge: 'שרוד תקיפות ישראליות, שמור על תמיכת איראן, שלוט בלבנון, לחם בגרילה',
+        challengeEn: 'Survive Israeli strikes, maintain Iranian support, control Lebanon, guerrilla warfare',
         difficulty: '★★★★★'
     },
     turkey: {
@@ -54,7 +64,9 @@ const LEADER_CARDS_DATA = {
         name: 'נשיא טורקיה',
         nameEn: 'President of Turkey',
         stats: ['💰 תקציב: $30B', '⚔️ צבא: 7 חטיבות', '☢️ גרעין: אין', '🕵️ מודיעין: MIT'],
+        statsEn: ['💰 Budget: $30B', '⚔️ Army: 7 Brigades', '☢️ Nuclear: None', '🕵️ Intel: MIT'],
         challenge: 'אזן בין נאט"ו לרוסיה, הכל את הכורדים, שלוט בסוריה, ייצא מל"טים',
+        challengeEn: 'Balance NATO and Russia, contain Kurds, control Syria, export drones',
         difficulty: '★★★☆☆'
     }
 };
@@ -80,32 +92,41 @@ const Game = {
 
     renderLeaderCards() {
         const container = document.getElementById('leader-cards-container');
-        container.innerHTML = Object.entries(LEADER_CARDS_DATA).map(([id, card]) => `
+        const selectTitle = document.querySelector('.select-title');
+        if (selectTitle) selectTitle.textContent = t('select_leader');
+        container.innerHTML = Object.entries(LEADER_CARDS_DATA).map(([id, card]) => {
+            const stats = LANG === 'en' ? (card.statsEn || card.stats) : card.stats;
+            const challenge = LANG === 'en' ? (card.challengeEn || card.challenge) : card.challenge;
+            const name = LANG === 'en' ? card.nameEn : card.name;
+            return `
             <div class="leader-card ${card.cssClass}" onclick="Game.selectLeader('${id}')">
                 <div class="leader-flag">${card.flag}</div>
-                <div class="leader-name">${card.name}</div>
-                <div class="leader-name-en">${card.nameEn}</div>
+                <div class="leader-name">${name}</div>
+                ${LANG === 'he' ? `<div class="leader-name-en">${card.nameEn}</div>` : ''}
                 <div class="leader-desc">
-                    ${card.stats.map(s => `<div class="stat-mini">${s}</div>`).join('')}
+                    ${stats.map(s => `<div class="stat-mini">${s}</div>`).join('')}
                 </div>
-                <div class="leader-challenge"><strong>אתגר:</strong> ${card.challenge}</div>
-                <div class="difficulty">קושי: ${card.difficulty}</div>
-            </div>
-        `).join('');
+                <div class="leader-challenge"><strong>${t('challenge')}:</strong> ${challenge}</div>
+                <div class="difficulty">${t('difficulty')}: ${card.difficulty}</div>
+            </div>`;
+        }).join('');
     },
 
     // ---- LEADER SELECTION ----
     selectLeader(leader) {
         this.engine.initState(leader);
         const briefing = GAME_DATA.briefings[leader];
-        document.getElementById('briefing-title').textContent = briefing.title;
-        document.getElementById('briefing-content').innerHTML = briefing.content;
+        document.getElementById('briefing-title').textContent = LANG === 'en' ? (briefing.titleEn || briefing.title) : briefing.title;
+        document.getElementById('briefing-content').innerHTML = LANG === 'en' ? (briefing.contentEn || briefing.content) : briefing.content;
+        document.querySelector('.classified-stamp').textContent = t('classified');
+        document.querySelector('#screen-briefing .btn-main .btn-text').textContent = t('assume_command');
         this.showScreen('screen-briefing');
     },
 
     // ---- START GAME ----
     startGame() {
         this.showScreen('screen-game');
+        updateGameNav();
         UI.updateTopbar();
         this.switchTab('tab-overview');
 
@@ -176,24 +197,24 @@ const Game = {
         const s = this.engine.state;
         switch (action) {
             case 'rally':
-                if (s.budget < 1) { UI.showNotification('תקציב לא מספיק', 'error'); return; }
+                if (s.budget < 1) { UI.showNotification(t('budget_insufficient'), 'error'); return; }
                 s.budget -= 1;
                 s.approval = Math.min(100, s.approval + 8);
-                UI.showNotification('עצרת תמיכה הצליחה! +8 אישור ציבורי', 'success');
+                UI.showNotification(t('rally_success'), 'success');
                 break;
             case 'invest':
-                if (s.budget < 2) { UI.showNotification('תקציב לא מספיק', 'error'); return; }
+                if (s.budget < 2) { UI.showNotification(t('budget_insufficient'), 'error'); return; }
                 s.budget -= 2;
                 s.stability = Math.min(100, s.stability + 10);
                 if (s.leader === 'saudi') s.vision2030 = Math.min(100, s.vision2030 + 3);
-                UI.showNotification('השקעה בתשתיות! +10 יציבות', 'success');
+                UI.showNotification(t('invest_success'), 'success');
                 break;
             case 'security':
-                if (s.budget < 1.5) { UI.showNotification('תקציב לא מספיק', 'error'); return; }
+                if (s.budget < 1.5) { UI.showNotification(t('budget_insufficient'), 'error'); return; }
                 s.budget -= 1.5;
                 s.stability = Math.min(100, s.stability + 8);
                 s.approval = Math.max(0, s.approval - 3);
-                UI.showNotification('ביטחון פנים הוגבר! +8 יציבות, -3 אישור', 'warning');
+                UI.showNotification(t('security_success'), 'warning');
                 break;
         }
         UI.updateTopbar();
@@ -206,7 +227,8 @@ const Game = {
         const choice = this.currentEvent.choices[choiceIndex];
         this.engine.applyEventEffect(choice.effect);
         UI.hideEvent();
-        UI.showNotification(`בחרת: ${choice.text}`, 'info');
+        const choiceText = LANG === 'en' ? (choice.textEn || choice.text) : choice.text;
+        UI.showNotification(t('chose').replace('{0}', choiceText), 'info');
         UI.updateTopbar();
         UI.renderCurrentTab();
         this.currentEvent = null;
@@ -218,13 +240,15 @@ const Game = {
 
         // Show results
         if (results.length > 0) {
+            const monthName = LANG === 'en' ? GAME_DATA.monthsEn[this.engine.state.month] : GAME_DATA.months[this.engine.state.month];
+            const summaryTitle = t('monthly_summary').replace('{0}', monthName).replace('{1}', this.engine.state.year);
             UI.showEvent({
-                title: `📋 סיכום חודשי - ${GAME_DATA.months[this.engine.state.month]} ${this.engine.state.year}`,
+                title: summaryTitle,
                 text: results.map(r => `<div style="padding:4px 0;border-bottom:1px solid var(--border-color)">${r}</div>`).join(''),
-                choices: [{ text: '✅ המשך', effect: {} }]
+                choices: [{ text: t('continue_btn'), effect: {} }]
             });
             this.currentEvent = {
-                choices: [{ text: '✅ המשך', effect: {} }]
+                choices: [{ text: t('continue_btn'), effect: {} }]
             };
         }
 
