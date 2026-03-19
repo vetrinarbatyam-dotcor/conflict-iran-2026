@@ -41,20 +41,32 @@ const UI = {
         const s = Game.engine.state;
         let html = '<div style="position:relative;width:100%;height:100%;min-height:380px;">';
 
-        // Player country
-        const playerCountryId = s.leader === 'israel' ? 'israel_map' : 'saudi_map';
-        const playerPos = s.leader === 'israel'
-            ? { top: '40%', left: '35%' }
-            : { top: '55%', left: '50%' };
+        // Player country position on map
+        const playerPositions = {
+            israel: { top: '40%', left: '35%', name: 'ישראל' },
+            saudi: { top: '60%', left: '50%', name: 'סעודיה' },
+            iran: { top: '35%', left: '70%', name: 'איראן' },
+            usa: { top: '10%', left: '10%', name: 'ארה"ב' },
+            hezbollah: { top: '28%', left: '38%', name: 'חיזבאללה' },
+            turkey: { top: '20%', left: '40%', name: 'טורקיה' }
+        };
+
+        // Map player's leader to the country ID it represents in the countries list
+        const leaderToCountryId = {
+            iran: 'iran', usa: 'usa', hezbollah: 'lebanon', turkey: 'turkey'
+        };
+        const playerCountryId = leaderToCountryId[s.leader];
+
+        const playerPos = playerPositions[s.leader];
         const playerFlag = GAME_DATA.leaders[s.leader].flag;
         html += `<div class="map-country player" style="top:${playerPos.top};left:${playerPos.left}">
             <span class="mc-flag">${playerFlag}</span>
-            <span class="mc-name">${s.leader === 'israel' ? 'ישראל' : 'סעודיה'}</span>
+            <span class="mc-name">${playerPos.name}</span>
         </div>`;
 
-        // Other countries
+        // Other countries - skip the one the player IS
         for (const [id, country] of Object.entries(GAME_DATA.countries)) {
-            if (id === 'palestine' && s.leader === 'saudi') continue;
+            if (id === playerCountryId) continue;
             const rel = s.relations[id];
             let cClass = 'neutral-c';
             if (rel) {
@@ -77,10 +89,17 @@ const UI = {
         const s = Game.engine.state;
         const threats = [];
 
-        if (s.iranNuclear > 80) {
-            threats.push({ level: '', levelIcon: '🔴', levelText: 'קריטי', text: `☢️ איראן: ${s.iranNuclear}% לפצצה גרעינית` });
-        } else if (s.iranNuclear > 50) {
-            threats.push({ level: 'low', levelIcon: '🟡', levelText: 'גבוה', text: `☢️ איראן: ${s.iranNuclear}% לפצצה גרעינית` });
+        if (s.leader !== 'iran') {
+            if (s.iranNuclear > 80) {
+                threats.push({ level: '', levelIcon: '🔴', levelText: 'קריטי', text: `☢️ איראן: ${s.iranNuclear}% לפצצה גרעינית` });
+            } else if (s.iranNuclear > 50) {
+                threats.push({ level: 'low', levelIcon: '🟡', levelText: 'גבוה', text: `☢️ איראן: ${s.iranNuclear}% לפצצה גרעינית` });
+            }
+        } else {
+            // Iran player sees threats from Israel/USA
+            if (s.relations.usa && s.relations.usa.value < -50) {
+                threats.push({ level: '', levelIcon: '🔴', levelText: 'קריטי', text: '🇺🇸 ארה"ב מאיימת בתקיפה!' });
+            }
         }
 
         if (s.atWar.length > 0) {
@@ -253,9 +272,18 @@ const UI = {
         const s = Game.engine.state;
         let html = '';
 
+        const nuclearTitles = {
+            israel: '🇮🇱 תוכנית גרעינית ישראלית',
+            saudi: '🇸🇦 תוכנית גרעינית סעודית',
+            iran: '🇮🇷 תוכנית גרעינית איראנית',
+            usa: '🇺🇸 ארסנל גרעיני אמריקאי',
+            hezbollah: '🇱🇧 חיזבאללה - אין תוכנית גרעינית',
+            turkey: '🇹🇷 תוכנית גרעינית טורקית'
+        };
+
         // Player's nuclear program
         html += `<div class="nuclear-progress">
-            <h3>${s.leader === 'israel' ? '🇮🇱 תוכנית גרעינית ישראלית' : '🇸🇦 תוכנית גרעינית סעודית'}</h3>
+            <h3>${nuclearTitles[s.leader] || 'תוכנית גרעינית'}</h3>
             <div class="progress-bar">
                 <div class="progress-fill" style="width:${s.nuclearProgress}%"></div>
             </div>
@@ -282,7 +310,11 @@ const UI = {
             </div>`;
         }
 
-        // Iran's nuclear program
+        // Iran's nuclear program - only show if NOT playing as Iran
+        if (s.leader === 'iran') {
+            document.getElementById('nuclear-panel').innerHTML = html;
+            return;
+        }
         html += `<div class="nuclear-progress" style="border-color:var(--accent-red)">
             <h3>🇮🇷 תוכנית גרעינית איראנית</h3>
             <div class="progress-bar">

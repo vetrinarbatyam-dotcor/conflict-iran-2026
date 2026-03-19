@@ -43,6 +43,7 @@ class GameEngine {
             monthlyIncome: leaderData.monthlyIncome,
             usAid: leaderData.usAid || 0,
             oilRevenue: leaderData.oilRevenue || 0,
+            iranAid: leaderData.iranAid || 0,
             approval: leaderData.startApproval,
             stability: 65,
 
@@ -313,6 +314,7 @@ class GameEngine {
         let income = this.state.monthlyIncome;
         if (this.state.usAid > 0) income += this.state.usAid / 12;
         if (this.state.oilRevenue > 0) income += this.state.oilRevenue;
+        if (this.state.iranAid > 0) income += this.state.iranAid / 12;
         this.state.budget += income;
 
         // 2. War costs
@@ -334,13 +336,18 @@ class GameEngine {
         }
         this.recalcMilitary();
 
-        // 4. Iran nuclear progress (AI)
-        if (this.state.iranNuclear < 100) {
-            const advance = Math.floor(Math.random() * 5) + 1;
-            this.state.iranNuclear = Math.min(100, this.state.iranNuclear + advance);
-            if (this.state.iranNuclear >= 100) {
-                results.push('☢️ אזהרה קריטית: איראן השלימה פצצה גרעינית!');
+        // 4. Iran nuclear progress (AI) - only if player is NOT Iran
+        if (this.state.leader !== 'iran') {
+            if (this.state.iranNuclear < 100) {
+                const advance = Math.floor(Math.random() * 5) + 1;
+                this.state.iranNuclear = Math.min(100, this.state.iranNuclear + advance);
+                if (this.state.iranNuclear >= 100) {
+                    results.push('☢️ אזהרה קריטית: איראן השלימה פצצה גרעינית!');
+                }
             }
+        } else {
+            // When playing Iran, nuclear progress = player's own progress
+            this.state.iranNuclear = this.state.nuclearProgress;
         }
 
         // 5. AI actions
@@ -551,7 +558,7 @@ class GameEngine {
         const turnNum = this.state.turn - 1;
         const allEvents = [
             ...GAME_DATA.events.common,
-            ...GAME_DATA.events[this.state.leader]
+            ...(GAME_DATA.events[this.state.leader] || [])
         ];
 
         for (const event of allEvents) {
@@ -603,7 +610,7 @@ class GameEngine {
     }
 
     getRandomNews() {
-        const pool = [...GAME_DATA.newsPool.common, ...GAME_DATA.newsPool[this.state.leader]];
+        const pool = [...GAME_DATA.newsPool.common, ...(GAME_DATA.newsPool[this.state.leader] || [])];
         const news = [];
         for (let i = 0; i < 3; i++) {
             news.push(pool[Math.floor(Math.random() * pool.length)]);

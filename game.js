@@ -2,6 +2,63 @@
    CONFLICT 2026 - MAIN GAME CONTROLLER
    ======================================== */
 
+const LEADER_CARDS_DATA = {
+    israel: {
+        cssClass: 'israel',
+        flag: '🇮🇱',
+        name: 'ראש ממשלת ישראל',
+        nameEn: 'Prime Minister of Israel',
+        stats: ['💰 תקציב: $18B', '⚔️ צבא: 7 חטיבות', '☢️ גרעין: מתקדם', '🕵️ מודיעין: מוסד'],
+        challenge: 'נטרל את הגרעין האיראני, הגן מפרוקסים, שמור על ברית ארה"ב',
+        difficulty: '★★★☆☆'
+    },
+    saudi: {
+        cssClass: 'saudi',
+        flag: '🇸🇦',
+        name: 'יורש העצר של סעודיה',
+        nameEn: 'Crown Prince of Saudi Arabia',
+        stats: ['💰 תקציב: $50B', '⚔️ צבא: 5 חטיבות', '☢️ גרעין: בפיתוח', '🕵️ מודיעין: GIP'],
+        challenge: 'הכל את החות\'ים, בלום את איראן, קדם Vision 2030, אזן בין ארה"ב לסין',
+        difficulty: '★★★★☆'
+    },
+    iran: {
+        cssClass: 'iran',
+        flag: '🇮🇷',
+        name: 'נשיא איראן',
+        nameEn: 'President of Iran',
+        stats: ['💰 תקציב: $25B', '⚔️ צבא: 8 חטיבות', '☢️ גרעין: 85%', '🕵️ מודיעין: VAJA'],
+        challenge: 'הגן על תוכנית הגרעין, נהל פרוקסים, שרוד סנקציות, בלום את ארה"ב וישראל',
+        difficulty: '★★★★☆'
+    },
+    usa: {
+        cssClass: 'usa',
+        flag: '🇺🇸',
+        name: 'נשיא ארה"ב',
+        nameEn: 'President of the United States',
+        stats: ['💰 תקציב: $100B', '⚔️ צבא: 50 חטיבות', '☢️ גרעין: מתקדם', '🕵️ מודיעין: CIA'],
+        challenge: 'נטרל גרעין איראני, נהל בריתות, אזן בית/חוץ, בחירות 2028',
+        difficulty: '★★☆☆☆'
+    },
+    hezbollah: {
+        cssClass: 'hezbollah',
+        flag: '🇱🇧',
+        name: 'מנהיג חיזבאללה',
+        nameEn: 'Leader of Hezbollah',
+        stats: ['💰 תקציב: $5B', '⚔️ צבא: 2 חטיבות', '☢️ גרעין: אין', '🕵️ מודיעין: חיזבאללה'],
+        challenge: 'שרוד תקיפות ישראליות, שמור על תמיכת איראן, שלוט בלבנון, לחם בגרילה',
+        difficulty: '★★★★★'
+    },
+    turkey: {
+        cssClass: 'turkey',
+        flag: '🇹🇷',
+        name: 'נשיא טורקיה',
+        nameEn: 'President of Turkey',
+        stats: ['💰 תקציב: $30B', '⚔️ צבא: 7 חטיבות', '☢️ גרעין: אין', '🕵️ מודיעין: MIT'],
+        challenge: 'אזן בין נאט"ו לרוסיה, הכל את הכורדים, שלוט בסוריה, ייצא מל"טים',
+        difficulty: '★★★☆☆'
+    }
+};
+
 const Game = {
     engine: new GameEngine(),
     currentEvent: null,
@@ -17,7 +74,24 @@ const Game = {
     },
 
     showLeaderSelect() {
+        this.renderLeaderCards();
         this.showScreen('screen-leader');
+    },
+
+    renderLeaderCards() {
+        const container = document.getElementById('leader-cards-container');
+        container.innerHTML = Object.entries(LEADER_CARDS_DATA).map(([id, card]) => `
+            <div class="leader-card ${card.cssClass}" onclick="Game.selectLeader('${id}')">
+                <div class="leader-flag">${card.flag}</div>
+                <div class="leader-name">${card.name}</div>
+                <div class="leader-name-en">${card.nameEn}</div>
+                <div class="leader-desc">
+                    ${card.stats.map(s => `<div class="stat-mini">${s}</div>`).join('')}
+                </div>
+                <div class="leader-challenge"><strong>אתגר:</strong> ${card.challenge}</div>
+                <div class="difficulty">קושי: ${card.difficulty}</div>
+            </div>
+        `).join('');
     },
 
     // ---- LEADER SELECTION ----
@@ -144,8 +218,6 @@ const Game = {
 
         // Show results
         if (results.length > 0) {
-            const resultText = results.join('\n');
-            // Show as event popup
             UI.showEvent({
                 title: `📋 סיכום חודשי - ${GAME_DATA.months[this.engine.state.month]} ${this.engine.state.year}`,
                 text: results.map(r => `<div style="padding:4px 0;border-bottom:1px solid var(--border-color)">${r}</div>`).join(''),
@@ -171,7 +243,7 @@ const Game = {
 
         // Check for event
         setTimeout(() => {
-            if (this.currentEvent) return; // Still showing results
+            if (this.currentEvent) return;
             const event = this.engine.getEvent();
             if (event) {
                 this.currentEvent = event;

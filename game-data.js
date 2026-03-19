@@ -40,6 +40,60 @@ const GAME_DATA = {
             nuclearProgress: 15, // Early stages
             vision2030: 45, // Progress percentage
             color: '#22c55e'
+        },
+        iran: {
+            flag: '🇮🇷',
+            title: 'נשיא איראן',
+            titleEn: 'President of Iran',
+            intelAgency: 'VAJA / ואג\'ה',
+            currency: 'USD',
+            startBudget: 25,
+            monthlyIncome: 2.0,
+            oilRevenue: 2.0,
+            startApproval: 55,
+            startMilitary: 8,
+            nuclearProgress: 85,
+            color: '#ef4444'
+        },
+        usa: {
+            flag: '🇺🇸',
+            title: 'נשיא ארה"ב',
+            titleEn: 'President of the United States',
+            intelAgency: 'CIA / סי.איי.איי',
+            currency: 'USD',
+            startBudget: 100,
+            monthlyIncome: 8.0,
+            startApproval: 48,
+            startMilitary: 50,
+            nuclearProgress: 100,
+            color: '#1d4ed8'
+        },
+        hezbollah: {
+            flag: '🇱🇧',
+            title: 'מנהיג חיזבאללה',
+            titleEn: 'Leader of Hezbollah',
+            intelAgency: 'מודיעין חיזבאללה',
+            currency: 'USD',
+            startBudget: 5,
+            monthlyIncome: 0.5,
+            iranAid: 1.0, // annual
+            startApproval: 65,
+            startMilitary: 2,
+            nuclearProgress: 0,
+            color: '#facc15'
+        },
+        turkey: {
+            flag: '🇹🇷',
+            title: 'נשיא טורקיה',
+            titleEn: 'President of Turkey',
+            intelAgency: 'MIT / מיט',
+            currency: 'USD',
+            startBudget: 30,
+            monthlyIncome: 2.5,
+            startApproval: 52,
+            startMilitary: 7,
+            nuclearProgress: 0,
+            color: '#dc2626'
         }
     },
 
@@ -132,6 +186,26 @@ const GAME_DATA = {
             iran: -50, usa: 60, russia: 20, china: 40, syria: -20,
             lebanon: -10, iraq: 20, turkey: 30, egypt: 60,
             jordan: 65, uae: 80, yemen: -70, qatar: 30, palestine: 10
+        },
+        iran: {
+            usa: -80, russia: 50, china: 60, syria: 70, lebanon: 80,
+            iraq: 40, turkey: -10, egypt: -20, jordan: -30,
+            uae: -40, yemen: 60, qatar: 20, palestine: 50
+        },
+        usa: {
+            iran: -80, russia: -30, china: -20, syria: -40, lebanon: -50,
+            iraq: 20, turkey: 40, egypt: 50, jordan: 60,
+            uae: 70, yemen: -30, qatar: 40, palestine: -10
+        },
+        hezbollah: {
+            iran: 90, usa: -90, russia: 40, china: 20, syria: 60,
+            iraq: 30, turkey: -20, egypt: -30, jordan: -40,
+            uae: -50, yemen: 50, qatar: 0, palestine: 70
+        },
+        turkey: {
+            iran: -10, usa: 40, russia: -20, china: 30, syria: -50,
+            lebanon: -20, iraq: -10, egypt: 20, jordan: 40,
+            uae: 30, yemen: 0, qatar: 50, palestine: 30
         }
     },
 
@@ -152,7 +226,11 @@ const GAME_DATA = {
     // ---- STARTING FORCES ----
     startForces: {
         israel: { infantry: 7, tanks: 15, aircraft: 8, sam: 5, missiles: 4, navy: 2, drones: 10, cyber: 3, specialForces: 3, ironDome: 10 },
-        saudi: { infantry: 5, tanks: 10, aircraft: 6, sam: 3, missiles: 6, navy: 3, drones: 5, cyber: 1, specialForces: 2, ironDome: 2 }
+        saudi: { infantry: 5, tanks: 10, aircraft: 6, sam: 3, missiles: 6, navy: 3, drones: 5, cyber: 1, specialForces: 2, ironDome: 2 },
+        iran: { infantry: 8, tanks: 12, aircraft: 4, sam: 6, missiles: 10, navy: 2, drones: 8, cyber: 2, specialForces: 4, ironDome: 0 },
+        usa: { infantry: 15, tanks: 20, aircraft: 20, sam: 10, missiles: 15, navy: 12, drones: 15, cyber: 8, specialForces: 8, ironDome: 5 },
+        hezbollah: { infantry: 3, tanks: 1, aircraft: 0, sam: 2, missiles: 8, navy: 0, drones: 5, cyber: 1, specialForces: 3, ironDome: 0 },
+        turkey: { infantry: 7, tanks: 10, aircraft: 6, sam: 4, missiles: 3, navy: 4, drones: 12, cyber: 2, specialForces: 3, ironDome: 1 }
     },
 
     // ---- INTELLIGENCE OPERATIONS ----
@@ -220,6 +298,61 @@ const GAME_DATA = {
                 <p><strong>☢️ גרעין:</strong> הממלכה שוקלת פיתוח תוכנית גרעינית עצמאית כהרתעה מול איראן.</p>
                 <p><strong>⚖️ איזון מעצמות:</strong> ארה"ב, סין ורוסיה מתחרות על השפעה. הממלכה חייבת לנווט בזהירות.</p>
                 <p>המשימה שלך: הגן על הממלכה, בלום את איראן והחות'ים, קדם את Vision 2030, ושמור על איזון בין המעצמות.</p>
+            `
+        },
+        iran: {
+            title: '🇮🇷 תדריך מודיעין - נשיא איראן',
+            content: `
+                <p><strong>תאריך: מרץ 2026</strong></p>
+                <p>כבוד הנשיא, הרפובליקה האסלאמית ניצבת בפני רגע גורלי.</p>
+                <p><strong>☢️ התוכנית הגרעינית:</strong> ההעשרה הגיעה ל-90%. אנחנו חודשים ספורים מפצצה מבצעית. ארה"ב וישראל מאיימות בתקיפה צבאית - יש להגן על המתקנים בכל מחיר.</p>
+                <p><strong>🛡️ סנקציות:</strong> הסנקציות המערביות פוגעות בכלכלה. הנפט הוא קו החיים שלנו. יש למצוא דרכים לעקוף את המגבלות.</p>
+                <p><strong>⚔️ ציר ההתנגדות:</strong> חיזבאללה, החות'ים וחמאס הם הזרועות שלנו באזור. יש לספק להם נשק, מימון והכוונה כדי להרתיע את ישראל וארה"ב.</p>
+                <p><strong>🏛️ מחאות פנימיות:</strong> האופוזיציה מארגנת הפגנות ברחובות. יש לשמור על יציבות פנימית מבלי לעורר גינוי בינלאומי נוסף.</p>
+                <p><strong>🤝 ברית רוסיה-סין:</strong> שיתוף הפעולה עם מוסקבה ובייג'ינג חיוני. מכירות נפט, עסקאות נשק ותמיכה במועצת הביטחון.</p>
+                <p>המשימה שלך: הגן על התוכנית הגרעינית, נהל את הפרוקסים, עמוד בסנקציות, דכא מחאות ושמור על הברית עם רוסיה וסין.</p>
+            `
+        },
+        usa: {
+            title: '🇺🇸 תדריך מודיעין - נשיא ארה"ב',
+            content: `
+                <p><strong>תאריך: מרץ 2026</strong></p>
+                <p>אדוני הנשיא, המזרח התיכון דורש את תשומת לבך המלאה.</p>
+                <p><strong>☢️ הגרעין האיראני:</strong> איראן על סף פצצה גרעינית. המודיעין מעריך 3-6 חודשים. כל האפשרויות על השולחן - דיפלומטיה, סנקציות, או פעולה צבאית.</p>
+                <p><strong>🤝 בעלי ברית:</strong> ישראל וסעודיה דורשים פעולה נחרצת. מצרים וירדן מבקשים יציבות. ניהול הציפיות של בעלי הברית קריטי.</p>
+                <p><strong>⚔️ אפשרויות צבאיות:</strong> קבוצת נושאות מטוסים במפרץ מוכנה לפעולה. אבל מלחמה נוספת במזרח התיכון תהיה יקרה פוליטית וכלכלית.</p>
+                <p><strong>🏛️ הקונגרס:</strong> לחץ מהרפובליקנים לפעול בנחישות. הדמוקרטים חוששים ממלחמה. בחירות האמצע מתקרבות.</p>
+                <p><strong>🗳️ שיקולי בחירות:</strong> כל החלטה במזרח התיכון משפיעה על סיכויי הבחירות. הציבור עייף ממלחמות אבל דורש ביטחון.</p>
+                <p><strong>🇨🇳🇷🇺 תחרות מעצמות:</strong> סין ורוסיה מנסות להרחיב השפעה באזור. יש לשמור על הדומיננטיות האמריקאית.</p>
+                <p>המשימה שלך: נטרל את האיום הגרעיני האיראני, שמור על בעלי ברית, נהל את הקונגרס, ושמור על יתרון מול סין ורוסיה.</p>
+            `
+        },
+        hezbollah: {
+            title: '🇱🇧 מנהיג חיזבאללה',
+            content: `
+                <p><strong>תאריך: מרץ 2026</strong></p>
+                <p>אח יקר, ההתנגדות ניצבת בפני מבחן היסטורי.</p>
+                <p><strong>⚔️ המלחמה עם ישראל:</strong> הצפון בוער. ישראל מאיימת במבצע קרקעי בלבנון. יש להפעיל את מאגר הטילים המדויקים ולהרתיע את האויב הציוני.</p>
+                <p><strong>🇮🇷 התמיכה האיראנית:</strong> טהרן היא עמוד השדרה שלנו. משלוחי נשק, מימון והכוונה חיוניים. יש לשמור על ציר האספקה דרך סוריה ועיראק.</p>
+                <p><strong>🇱🇧 שליטה בלבנון:</strong> המצב הפוליטי בלבנון שברירי. יש לשמור על כוח פוליטי וצבאי כדי להבטיח את מעמדנו.</p>
+                <p><strong>🚀 ארסנל הרקטות:</strong> יותר מ-100,000 רקטות וטילים, כולל טילים מדויקים שיכולים לפגוע בכל נקודה בישראל. זו ההרתעה שלנו.</p>
+                <p><strong>🕳️ רשת המנהרות:</strong> המנהרות הן קו ההגנה שלנו. יש להרחיב ולחזק אותן מפני חדירה ישראלית.</p>
+                <p><strong>✈️ תקיפות אוויריות:</strong> חיל האוויר הישראלי מבצע תקיפות יומיות. יש לפזר כוחות, להסוות ולחזק את ההגנה האווירית.</p>
+                <p>המשימה שלך: לחם נגד ישראל, שמור על התמיכה האיראנית, שלוט בלבנון, ושרוד את התקיפות הישראליות.</p>
+            `
+        },
+        turkey: {
+            title: '🇹🇷 תדריך מודיעין - נשיא טורקיה',
+            content: `
+                <p><strong>תאריך: מרץ 2026</strong></p>
+                <p>אדוני הנשיא, טורקיה ניצבת בצומת דרכים אסטרטגי.</p>
+                <p><strong>⚔️ האיום הכורדי:</strong> ה-PKK ממשיך בפיגועים בדרום-מזרח טורקיה. הכוחות הכורדיים בצפון סוריה מהווים איום על הביטחון הלאומי. יש לנטרל.</p>
+                <p><strong>🏛️ נאט"ו:</strong> חברות בנאט"ו מספקת ערבויות ביטחוניות, אבל המערב לוחץ בנושאי זכויות אדם ומדיניות חוץ עצמאית. איזון עדין.</p>
+                <p><strong>🇷🇺 רוסיה:</strong> היחסים עם מוסקבה מורכבים - עסקת ה-S400, האנרגיה הרוסית, אבל גם חיכוכים בסוריה ובקווקז.</p>
+                <p><strong>🇸🇾 הגבול הסורי:</strong> מיליוני פליטים סורים בטורקיה. הכוחות שלנו בצפון סוריה מול אסד, הכורדים והרוסים.</p>
+                <p><strong>💰 משבר כלכלי:</strong> הלירה הטורקית ממשיכה להיחלש. אינפלציה גבוהה. הציבור דורש שיפור כלכלי.</p>
+                <p><strong>🤖 טכנולוגיית מל"טים:</strong> מל"טי Bayraktar הם כרטיס הביקור שלנו. ביקוש עולמי גובר. יצוא הנשק מחזק את מעמדנו.</p>
+                <p>המשימה שלך: נטרל את האיום הכורדי, אזן בין נאט"ו לרוסיה, ייצב את הכלכלה, וחזק את מעמד טורקיה כמעצמה אזורית.</p>
             `
         }
     },
@@ -435,6 +568,209 @@ const GAME_DATA = {
                     { text: '✋ דחה כרגע', effect: { usRelation: -15, approval: 10, iranRelation: 5 } }
                 ]
             }
+        ],
+
+        // Iran-specific events
+        iran: [
+            {
+                id: 'iran_sanctions_pressure',
+                title: '💰 לחץ סנקציות',
+                text: 'הסנקציות החדשות של ארה"ב פוגעות קשות בכלכלה. יצוא הנפט ירד ב-30%. הריאל האיראני צונח.',
+                month: 1,
+                choices: [
+                    { text: '🇨🇳 הגבר מכירות נפט לסין', effect: { chinaRelation: 10, usRelation: -10, budget: 3 } },
+                    { text: '💰 הדפסת כסף ותקציב חירום', effect: { approval: -10, budget: 2 } },
+                    { text: '🤝 הצע משא ומתן עם ארה"ב', effect: { usRelation: 10, approval: -15 } }
+                ]
+            },
+            {
+                id: 'iran_proxy_management',
+                title: '⚔️ ניהול פרוקסים',
+                text: 'חיזבאללה דורש משלוח נשק מתקדם דחוף. החות\'ים מבקשים מימון נוסף. המשאבים מוגבלים.',
+                month: 2,
+                choices: [
+                    { text: '🚀 שלח נשק מתקדם לחיזבאללה', effect: { lebanonRelation: 15, usRelation: -10, budget: -3 } },
+                    { text: '💰 חלק משאבים בין כל הפרוקסים', effect: { budget: -4, yemenRelation: 10, lebanonRelation: 5 } },
+                    { text: '✋ צמצם תמיכה זמנית', effect: { lebanonRelation: -15, yemenRelation: -10, budget: 2 } }
+                ]
+            },
+            {
+                id: 'iran_nuclear_inspectors',
+                title: '☢️ מפקחי סבב"א',
+                text: 'סוכנות האנרגיה הבינלאומית דורשת גישה למתקנים חשודים. סירוב יגביר סנקציות. שיתוף פעולה יחשוף סודות.',
+                month: 4,
+                choices: [
+                    { text: '🚫 סרב לגישה', effect: { usRelation: -20, russiaRelation: -5, nuclearProgress: 5 } },
+                    { text: '🤝 אפשר גישה מוגבלת', effect: { usRelation: 5, nuclearProgress: -5 } },
+                    { text: '🕵️ הצג מתקנים מזויפים', effect: { budget: -2, nuclearProgress: 3 } }
+                ]
+            },
+            {
+                id: 'iran_internal_protests',
+                title: '🏛️ מחאות פנימיות',
+                text: 'הפגנות ענק בטהרן ואיספהאן. המפגינים דורשים חופש ושיפור כלכלי. משטרת המוסר מתקשה.',
+                month: 5,
+                choices: [
+                    { text: '🔒 דיכוי אלים', effect: { approval: -20, usRelation: -15, stability: -10 } },
+                    { text: '🤝 רפורמות קוסמטיות', effect: { approval: 5, budget: -2 } },
+                    { text: '📡 ניתוק אינטרנט וסגירת רשתות', effect: { approval: -10, budget: -1 } }
+                ]
+            }
+        ],
+
+        // USA-specific events
+        usa: [
+            {
+                id: 'usa_congressional_vote',
+                title: '🏛️ הצבעה בקונגרס',
+                text: 'הקונגרס מצביע על חבילת סיוע צבאית לישראל וסעודיה. האופוזיציה מתנגדת להוצאה.',
+                month: 1,
+                choices: [
+                    { text: '📢 לובי אגרסיבי בעד', effect: { approval: -5, budget: -5, usRelation: 10 } },
+                    { text: '⚖️ פשרה - חבילה מצומצמת', effect: { budget: -3 } },
+                    { text: '✋ דחה להצבעה עתידית', effect: { approval: 5 } }
+                ]
+            },
+            {
+                id: 'usa_ally_pressure',
+                title: '🤝 לחץ מבעלי ברית',
+                text: 'ישראל וסעודיה דורשות פעולה אמריקאית נחרצת נגד איראן. אירופה מעדיפה דיפלומטיה.',
+                month: 3,
+                choices: [
+                    { text: '⚔️ הכרז על "קו אדום" ברור', effect: { iranRelation: -20, approval: 10 } },
+                    { text: '🗣️ דיפלומטיה עם לחץ', effect: { iranRelation: -5 } },
+                    { text: '⏳ דחה החלטה', effect: { approval: -5 } }
+                ]
+            },
+            {
+                id: 'usa_carrier_deployment',
+                title: '⚓ פריסת קבוצת נושאות',
+                text: 'הפנטגון מציע לשלוח קבוצת נושאות מטוסים נוספת למפרץ הפרסי כהרתעה.',
+                month: 4,
+                choices: [
+                    { text: '⚓ שלח שתי קבוצות נושאות', effect: { iranRelation: -15, approval: 5, budget: -8, military: 2 } },
+                    { text: '⚓ שלח קבוצה אחת', effect: { iranRelation: -10, budget: -4, military: 1 } },
+                    { text: '✋ הסתפק בכוחות קיימים', effect: { approval: -5 } }
+                ]
+            },
+            {
+                id: 'usa_election_impact',
+                title: '🗳️ השפעה על הבחירות',
+                text: 'סקרים מראים שהציבור מחולק לגבי המדיניות במזרח התיכון. בחירות האמצע מתקרבות.',
+                month: 6,
+                choices: [
+                    { text: '💪 הצג עמדה חזקה', effect: { approval: 10, iranRelation: -10, budget: -3 } },
+                    { text: '🕊️ הדגש דיפלומטיה', effect: { approval: 5, iranRelation: 5 } },
+                    { text: '🏠 התמקד בנושאים פנימיים', effect: { approval: 15 } }
+                ]
+            }
+        ],
+
+        // Hezbollah-specific events
+        hezbollah: [
+            {
+                id: 'hezbollah_israeli_airstrike',
+                title: '✈️ תקיפה אווירית ישראלית!',
+                text: 'חיל האוויר הישראלי תקף מחסני נשק ומרכזי פיקוד בדרום לבנון. נזק כבד לתשתיות.',
+                month: 1,
+                choices: [
+                    { text: '🚀 תקיפת תגמול - מטח טילים', effect: { approval: 15, budget: -2, military: -1 } },
+                    { text: '🕳️ פנה למנהרות וסמן', effect: { approval: -5, military: 0 } },
+                    { text: '📢 גינוי בינלאומי + שיקום', effect: { iranRelation: 5, budget: -1 } }
+                ]
+            },
+            {
+                id: 'hezbollah_iranian_shipment',
+                title: '🚢 משלוח נשק איראני',
+                text: 'איראן מציעה משלוח גדול של טילים מדויקים ומל"טים מתקדמים דרך סוריה.',
+                month: 2,
+                choices: [
+                    { text: '✅ קבל את המשלוח המלא', effect: { iranRelation: 10, military: 2, usRelation: -10 } },
+                    { text: '🔀 פצל למשלוחים קטנים', effect: { iranRelation: 5, military: 1 } },
+                    { text: '✋ דחה - הסיכון גבוה מדי', effect: { iranRelation: -15 } }
+                ]
+            },
+            {
+                id: 'hezbollah_lebanon_crisis',
+                title: '🇱🇧 משבר ממשלתי בלבנון',
+                text: 'ראש הממשלה הלבנוני מנסה לפרק את הזרוע הצבאית של חיזבאללה. לחץ בינלאומי גובר.',
+                month: 4,
+                choices: [
+                    { text: '💪 הפגנת כוח - סגור את ביירות', effect: { approval: 10, usRelation: -15 } },
+                    { text: '🗣️ משא ומתן פוליטי', effect: { approval: -5 } },
+                    { text: '🕵️ לחץ חשאי על פוליטיקאים', effect: { budget: -1 } }
+                ]
+            },
+            {
+                id: 'hezbollah_tunnel_discovery',
+                title: '🕳️ גילוי מנהרה',
+                text: 'צה"ל גילה מנהרה חוצת גבול. יש חשש שהם יודעים על רשת המנהרות המלאה.',
+                month: 5,
+                choices: [
+                    { text: '💣 פוצץ את המנהרה שנחשפה', effect: { military: -1 } },
+                    { text: '🔀 שנה מסלולי מנהרות', effect: { budget: -2 } },
+                    { text: '🎭 הכחש ופעל כרגיל', effect: { approval: 5 } }
+                ]
+            }
+        ],
+
+        // Turkey-specific events
+        turkey: [
+            {
+                id: 'turkey_pkk_attack',
+                title: '💥 פיגוע PKK',
+                text: 'פיגוע של ה-PKK בדיארבקיר - 15 חיילים נהרגו. הציבור דורש תגובה קשה.',
+                month: 1,
+                choices: [
+                    { text: '⚔️ מבצע צבאי בצפון עיראק', effect: { iraqRelation: -20, approval: 15, budget: -3 } },
+                    { text: '✈️ תקיפות אוויריות ממוקדות', effect: { iraqRelation: -10, approval: 10, budget: -2 } },
+                    { text: '🔒 הגבר ביטחון פנים', effect: { approval: 5, budget: -1 } }
+                ]
+            },
+            {
+                id: 'turkey_nato_pressure',
+                title: '🏛️ לחץ נאט"ו',
+                text: 'נאט"ו דורש מטורקיה לבחור - מערכת ה-S400 הרוסית או מטוסי F-35 אמריקאיים.',
+                month: 3,
+                choices: [
+                    { text: '🇺🇸 ויתור על S400 לטובת F-35', effect: { usRelation: 20, russiaRelation: -25, military: 2 } },
+                    { text: '🇷🇺 שמור על S400', effect: { russiaRelation: 15, usRelation: -20 } },
+                    { text: '⚖️ נסה לשמור על שניהם', effect: { usRelation: -5, russiaRelation: -5 } }
+                ]
+            },
+            {
+                id: 'turkey_syria_offensive',
+                title: '🇸🇾 מבצע בסוריה',
+                text: 'הכוחות הכורדיים בצפון סוריה מתחזקים. הצבא מציע מבצע חוצה-גבול נוסף.',
+                month: 4,
+                choices: [
+                    { text: '⚔️ מבצע קרקעי רחב', effect: { syriaRelation: -20, russiaRelation: -10, approval: 10, budget: -5 } },
+                    { text: '🤖 הפעלת מל"טים בלבד', effect: { syriaRelation: -10, approval: 5, budget: -2 } },
+                    { text: '🛡️ חזק עמדות קיימות', effect: { budget: -1 } }
+                ]
+            },
+            {
+                id: 'turkey_economic_crisis',
+                title: '💰 משבר כלכלי',
+                text: 'הלירה הטורקית צנחה ב-20%. אינפלציה של 60%. מחאות כלכליות ברחובות.',
+                month: 5,
+                choices: [
+                    { text: '💰 העלאת ריבית דרסטית', effect: { approval: -10, budget: -3 } },
+                    { text: '🇶🇦 בקש הלוואה מקטאר', effect: { qatarRelation: 10, budget: 4 } },
+                    { text: '📢 האשם גורמים חיצוניים', effect: { approval: 5, usRelation: -5 } }
+                ]
+            },
+            {
+                id: 'turkey_drone_exports',
+                title: '🤖 יצוא מל"טים',
+                text: 'מדינות רבות מבקשות לרכוש מל"טי Bayraktar. הזדמנות כלכלית ודיפלומטית.',
+                month: 7,
+                choices: [
+                    { text: '🌍 מכור לכל דורש', effect: { budget: 5, usRelation: -10 } },
+                    { text: '🤝 מכור רק לבעלי ברית', effect: { budget: 3, usRelation: 5 } },
+                    { text: '🏭 השקע בפיתוח דור הבא', effect: { budget: -3, military: 2 } }
+                ]
+            }
         ]
     },
 
@@ -465,6 +801,38 @@ const GAME_DATA = {
             'ארמקו: רווחים שיא | Aramco reports record profits',
             'סופת חול פוגעת בריאד | Sandstorm hits Riyadh',
             'הג\'ז 2026: מיליוני צליינים | Hajj 2026: Millions of pilgrims'
+        ],
+        iran: [
+            'סנקציות חדשות פוגעות בכלכלה | New sanctions hit economy',
+            'מחאות בטהרן נגד המשטר | Protests in Tehran against regime',
+            'התקדמות בהעשרת אורניום | Uranium enrichment advances',
+            'משמרות המהפכה מגבירים פעילות | IRGC increases operations',
+            'יצוא נפט לסין עולה | Oil exports to China increase',
+            'ניסוי טילים בליסטיים חדש | New ballistic missile test'
+        ],
+        usa: [
+            'הפנטגון מעריך איומים באזור | Pentagon assesses regional threats',
+            'הקונגרס דן בתקציב הביטחון | Congress debates defense budget',
+            'סקרים: הבחירות מתקרבות | Polls: Elections approaching',
+            'קבוצת נושאות במפרץ הפרסי | Carrier group in Persian Gulf',
+            'דיפלומטיה אמריקאית במזרח התיכון | US diplomacy in Middle East',
+            'CIA: דו"ח מודיעין חדש על איראן | CIA: New intel report on Iran'
+        ],
+        hezbollah: [
+            'מטח רקטות לעבר צפון ישראל | Rocket barrage toward northern Israel',
+            'רשת מנהרות חדשה נחשפת | New tunnel network exposed',
+            'לבנון על סף קריסה כלכלית | Lebanon on brink of economic collapse',
+            'משלוח נשק איראני הגיע | Iranian arms shipment arrives',
+            'נסראללה: לא נכנע | Nasrallah: We will not surrender',
+            'מל"טים חדשים בארסנל חיזבאללה | New drones in Hezbollah arsenal'
+        ],
+        turkey: [
+            'הלירה הטורקית ממשיכה לצנוח | Turkish lira continues to fall',
+            'מל"טי Bayraktar: עסקאות חדשות | Bayraktar drones: New deals',
+            'נאט"ו דן בתפקיד טורקיה | NATO discusses Turkey\'s role',
+            'ארדואן: טורקיה מעצמה אזורית | Erdogan: Turkey is a regional power',
+            'עימותים עם PKK בדרום-מזרח | Clashes with PKK in southeast',
+            'מבצע צבאי בצפון סוריה | Military operation in northern Syria'
         ]
     }
 };
