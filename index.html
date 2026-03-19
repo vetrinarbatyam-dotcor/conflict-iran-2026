@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="he" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CONFLICT 2026: The Iran Crisis</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Condensed:wght@300;400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <!-- TITLE SCREEN -->
+        <div id="screen-title" class="screen active">
+            <div class="title-bg">
+                <div class="scanlines"></div>
+                <div class="title-content">
+                    <div class="title-glitch" data-text="CONFLICT">CONFLICT</div>
+                    <div class="title-year">2026</div>
+                    <div class="title-subtitle">THE IRAN CRISIS</div>
+                    <div class="title-tagline">A Middle East Political & Military Simulator</div>
+                    <button class="btn-main" onclick="Game.showLeaderSelect()">
+                        <span class="btn-text">התחל משחק חדש</span>
+                        <span class="btn-sub">START NEW GAME</span>
+                    </button>
+                    <button class="btn-secondary" onclick="Game.showHowToPlay()">
+                        <span>איך משחקים? | HOW TO PLAY</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- HOW TO PLAY -->
+        <div id="screen-howtoplay" class="screen">
+            <div class="panel-full">
+                <h1>📖 HOW TO PLAY | איך משחקים</h1>
+                <div class="howto-grid">
+                    <div class="howto-card">
+                        <h3>🎯 מטרה | OBJECTIVE</h3>
+                        <p>בתור מנהיג מדינה במזרח התיכון, עליך לנהל דיפלומטיה, צבא, מודיעין ומשק כדי להשיג דומיננטיות אזורית ולנטרל את האיום האיראני.</p>
+                        <p>As a Middle East leader, manage diplomacy, military, intelligence and economy to achieve regional dominance and neutralize the Iranian threat.</p>
+                    </div>
+                    <div class="howto-card">
+                        <h3>⏱️ תורות | TURNS</h3>
+                        <p>כל תור מייצג חודש אחד. בכל תור תקבל החלטות בתחומי דיפלומטיה, צבא, מודיעין ותקציב. אחר כך ה-AI של המדינות האחרות פועל.</p>
+                    </div>
+                    <div class="howto-card">
+                        <h3>🤝 דיפלומטיה | DIPLOMACY</h3>
+                        <p>שפר או הרע יחסים עם מדינות. יחסים טובים = סחר ובריתות. יחסים רעים = הצדקה למלחמה.</p>
+                    </div>
+                    <div class="howto-card">
+                        <h3>⚔️ צבא | MILITARY</h3>
+                        <p>רכוש טנקים, מטוסים, טילים ומערכות הגנה. פרוס כוחות בגבולות. פלוש לשטח אויב או הגן על שלך.</p>
+                    </div>
+                    <div class="howto-card">
+                        <h3>🕵️ מודיעין | INTELLIGENCE</h3>
+                        <p>הפעל סוכנים לריגול, חבלה, תמיכה במורדים, וחיסולים ממוקדים. פעולות מסוכנות אך יעילות.</p>
+                    </div>
+                    <div class="howto-card">
+                        <h3>☢️ גרעין | NUCLEAR</h3>
+                        <p>פתח או נטרל תוכניות גרעין. נשק גרעיני = הרתעה אולטימטיבית, אבל בעלות דיפלומטית כבדה.</p>
+                    </div>
+                </div>
+                <button class="btn-main" onclick="Game.showScreen('screen-title')">חזור | BACK</button>
+            </div>
+        </div>
+
+        <!-- LEADER SELECT -->
+        <div id="screen-leader" class="screen">
+            <div class="leader-select-container">
+                <h1 class="select-title">בחר מנהיג | SELECT YOUR LEADER</h1>
+                <div class="leader-cards">
+                    <div class="leader-card israel" onclick="Game.selectLeader('israel')">
+                        <div class="leader-flag">🇮🇱</div>
+                        <div class="leader-name">ראש ממשלת ישראל</div>
+                        <div class="leader-name-en">Prime Minister of Israel</div>
+                        <div class="leader-desc">
+                            <div class="stat-mini">💰 תקציב: $18B</div>
+                            <div class="stat-mini">⚔️ צבא: 7 חטיבות</div>
+                            <div class="stat-mini">☢️ גרעין: מתקדם</div>
+                            <div class="stat-mini">🕵️ מודיעין: מוסד</div>
+                        </div>
+                        <div class="leader-challenge">
+                            <strong>אתגר:</strong> נטרל את הגרעין האיראני, הגן מפרוקסים, שמור על ברית ארה"ב
+                        </div>
+                        <div class="difficulty">קושי: ★★★☆☆</div>
+                    </div>
+                    <div class="leader-card saudi" onclick="Game.selectLeader('saudi')">
+                        <div class="leader-flag">🇸🇦</div>
+                        <div class="leader-name">יורש העצר של סעודיה</div>
+                        <div class="leader-name-en">Crown Prince of Saudi Arabia</div>
+                        <div class="leader-desc">
+                            <div class="stat-mini">💰 תקציב: $50B</div>
+                            <div class="stat-mini">⚔️ צבא: 5 חטיבות</div>
+                            <div class="stat-mini">☢️ גרעין: בפיתוח</div>
+                            <div class="stat-mini">🕵️ מודיעין: GIP</div>
+                        </div>
+                        <div class="leader-challenge">
+                            <strong>אתגר:</strong> הכל את החות'ים, בלום את איראן, קדם Vision 2030, אזן בין ארה"ב לסין
+                        </div>
+                        <div class="difficulty">קושי: ★★★★☆</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BRIEFING SCREEN -->
+        <div id="screen-briefing" class="screen">
+            <div class="briefing-container">
+                <div class="classified-stamp">CLASSIFIED // סודי ביותר</div>
+                <h1 id="briefing-title"></h1>
+                <div id="briefing-content" class="briefing-text"></div>
+                <button class="btn-main" onclick="Game.startGame()">
+                    <span class="btn-text">קבל פיקוד | ASSUME COMMAND</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- MAIN GAME SCREEN -->
+        <div id="screen-game" class="screen">
+            <!-- TOP BAR -->
+            <div class="topbar">
+                <div class="topbar-left">
+                    <span id="player-flag" class="topbar-flag"></span>
+                    <span id="player-title" class="topbar-title"></span>
+                </div>
+                <div class="topbar-center">
+                    <span id="game-date" class="topbar-date"></span>
+                    <span id="game-turn" class="topbar-turn"></span>
+                </div>
+                <div class="topbar-right">
+                    <div class="topbar-stat">💰 <span id="stat-budget">0</span>B$</div>
+                    <div class="topbar-stat">📊 <span id="stat-approval">0</span>%</div>
+                    <div class="topbar-stat">⚔️ <span id="stat-military">0</span></div>
+                    <div class="topbar-stat" id="stat-nuclear-container">☢️ <span id="stat-nuclear">0</span>%</div>
+                </div>
+            </div>
+
+            <!-- NEWS TICKER -->
+            <div class="news-ticker">
+                <div class="ticker-label">⚡ חדשות</div>
+                <div class="ticker-content" id="news-ticker"></div>
+            </div>
+
+            <!-- MAIN CONTENT AREA -->
+            <div class="game-layout">
+                <!-- LEFT NAV -->
+                <div class="game-nav">
+                    <button class="nav-btn active" data-tab="tab-overview" onclick="Game.switchTab('tab-overview')">
+                        <span class="nav-icon">🗺️</span>
+                        <span class="nav-label">סקירה</span>
+                    </button>
+                    <button class="nav-btn" data-tab="tab-diplomacy" onclick="Game.switchTab('tab-diplomacy')">
+                        <span class="nav-icon">🤝</span>
+                        <span class="nav-label">דיפלומטיה</span>
+                    </button>
+                    <button class="nav-btn" data-tab="tab-military" onclick="Game.switchTab('tab-military')">
+                        <span class="nav-icon">⚔️</span>
+                        <span class="nav-label">צבא</span>
+                    </button>
+                    <button class="nav-btn" data-tab="tab-intelligence" onclick="Game.switchTab('tab-intelligence')">
+                        <span class="nav-icon">🕵️</span>
+                        <span class="nav-label">מודיעין</span>
+                    </button>
+                    <button class="nav-btn" data-tab="tab-nuclear" onclick="Game.switchTab('tab-nuclear')">
+                        <span class="nav-icon">☢️</span>
+                        <span class="nav-label">גרעין</span>
+                    </button>
+                    <button class="nav-btn" data-tab="tab-budget" onclick="Game.switchTab('tab-budget')">
+                        <span class="nav-icon">💰</span>
+                        <span class="nav-label">תקציב</span>
+                    </button>
+                    <button class="nav-btn" data-tab="tab-domestic" onclick="Game.switchTab('tab-domestic')">
+                        <span class="nav-icon">🏛️</span>
+                        <span class="nav-label">פנים</span>
+                    </button>
+                    <div class="nav-spacer"></div>
+                    <button class="nav-btn end-turn-btn" onclick="Game.endTurn()">
+                        <span class="nav-icon">⏭️</span>
+                        <span class="nav-label">סיים תור</span>
+                    </button>
+                </div>
+
+                <!-- MAIN CONTENT -->
+                <div class="game-content">
+                    <!-- OVERVIEW TAB -->
+                    <div id="tab-overview" class="tab-content active">
+                        <h2>🗺️ סקירה אזורית | Regional Overview</h2>
+                        <div class="overview-grid">
+                            <div class="map-container" id="map-container"></div>
+                            <div class="threats-panel">
+                                <h3>🚨 איומים פעילים | Active Threats</h3>
+                                <div id="threats-list"></div>
+                            </div>
+                        </div>
+                        <div class="relations-summary" id="relations-summary"></div>
+                    </div>
+
+                    <!-- DIPLOMACY TAB -->
+                    <div id="tab-diplomacy" class="tab-content">
+                        <h2>🤝 דיפלומטיה | Diplomacy</h2>
+                        <div id="diplomacy-panel"></div>
+                    </div>
+
+                    <!-- MILITARY TAB -->
+                    <div id="tab-military" class="tab-content">
+                        <h2>⚔️ צבא | Military</h2>
+                        <div class="military-layout">
+                            <div class="forces-panel" id="forces-panel"></div>
+                            <div class="procurement-panel" id="procurement-panel"></div>
+                            <div class="deployment-panel" id="deployment-panel"></div>
+                        </div>
+                    </div>
+
+                    <!-- INTELLIGENCE TAB -->
+                    <div id="tab-intelligence" class="tab-content">
+                        <h2>🕵️ מודיעין | Intelligence</h2>
+                        <div id="intel-panel"></div>
+                    </div>
+
+                    <!-- NUCLEAR TAB -->
+                    <div id="tab-nuclear" class="tab-content">
+                        <h2>☢️ גרעין | Nuclear Program</h2>
+                        <div id="nuclear-panel"></div>
+                    </div>
+
+                    <!-- BUDGET TAB -->
+                    <div id="tab-budget" class="tab-content">
+                        <h2>💰 תקציב | Budget</h2>
+                        <div id="budget-panel"></div>
+                    </div>
+
+                    <!-- DOMESTIC TAB -->
+                    <div id="tab-domestic" class="tab-content">
+                        <h2>🏛️ פנים | Domestic Affairs</h2>
+                        <div id="domestic-panel"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EVENT POPUP -->
+        <div id="event-overlay" class="overlay hidden">
+            <div class="event-popup">
+                <div class="event-header" id="event-header"></div>
+                <div class="event-body" id="event-body"></div>
+                <div class="event-choices" id="event-choices"></div>
+            </div>
+        </div>
+
+        <!-- GAME OVER -->
+        <div id="screen-gameover" class="screen">
+            <div class="gameover-container">
+                <h1 id="gameover-title"></h1>
+                <div id="gameover-content"></div>
+                <button class="btn-main" onclick="location.reload()">משחק חדש | NEW GAME</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="game-data.js"></script>
+    <script src="game-engine.js"></script>
+    <script src="game-ui.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
