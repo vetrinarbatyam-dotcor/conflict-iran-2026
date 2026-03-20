@@ -445,7 +445,7 @@ body {
 .map-country:hover { transform: scale(1.1); z-index: 10; }
 .map-country .mc-flag { font-size: 1.5rem; display: block; }
 .map-country .mc-name { font-size: 0.7rem; color: var(--text-secondary); }
-.map-country.player { border-color: var(--accent-cyan); box-shadow: var(--glow-blue); }
+.map-country.player { border-color: var(--accent-cyan); box-shadow: var(--glow-blue); z-index: 5; }
 .map-country.enemy { border-color: var(--accent-red); }
 .map-country.ally { border-color: var(--accent-green); }
 .map-country.neutral-c { border-color: var(--accent-yellow); }
