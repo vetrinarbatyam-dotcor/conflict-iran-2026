@@ -473,7 +473,7 @@ const UI = {
         const colors = { info: 'var(--accent-cyan)', success: 'var(--accent-green)', warning: 'var(--accent-yellow)', error: 'var(--accent-red)' };
         const notif = document.createElement('div');
         notif.style.cssText = `position:fixed;top:90px;left:50%;transform:translateX(-50%);background:var(--bg-panel);border:1px solid ${colors[type]};
-            color:${colors[type]};padding:12px 24px;border-radius:8px;z-index:999;font-size:0.9rem;animation:popIn 0.3s;max-width:500px;text-align:center;`;
+            color:${colors[type]};padding:12px 24px;border-radius:8px;z-index:999;font-size:0.9rem;animation:popIn 0.3s;max-width:min(500px,90vw);text-align:center;`;
         notif.textContent = msg;
         document.body.appendChild(notif);
         setTimeout(() => notif.remove(), 3000);

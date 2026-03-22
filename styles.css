@@ -59,11 +59,13 @@ body {
     color: var(--text-primary);
     overflow: hidden;
     height: 100vh;
+    height: 100dvh;
     width: 100vw;
+    -webkit-tap-highlight-color: transparent;
 }
 
 /* ---- SCREENS ---- */
-.screen { display: none; width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; }
+.screen { display: none; width: 100vw; height: 100vh; height: 100dvh; position: absolute; top: 0; left: 0; }
 .screen.active { display: flex; flex-direction: column; }
 
 /* ---- TITLE SCREEN ---- */
@@ -467,4 +469,161 @@ body {
 @media (max-width: 640px) {
     .overview-grid { grid-template-columns: 1fr; }
     .leader-cards { grid-template-columns: 1fr; }
+}
+
+/* ====== MOBILE (max-width: 768px) ====== */
+@media (max-width: 768px) {
+    /* -- Title Screen -- */
+    .title-glitch { font-size: 3rem; letter-spacing: 0.15em; }
+    .title-year { font-size: 2rem; }
+    .title-subtitle { font-size: 0.9rem; letter-spacing: 0.25em; }
+    .title-tagline { font-size: 0.8rem; margin: 12px 0 24px; }
+    .btn-main { padding: 14px 32px; font-size: 0.9rem; }
+    .btn-main .btn-text { font-size: 1rem; }
+
+    /* -- Language Toggle -- */
+    .lang-toggle { top: 8px; right: 8px; font-size: 0.75rem; padding: 5px 10px; }
+
+    /* -- Leader Select -- */
+    .leader-select-container { padding: 20px 12px; justify-content: flex-start; padding-top: 40px; }
+    .select-title { font-size: 1.3rem; margin-bottom: 20px; }
+    .leader-cards { grid-template-columns: 1fr !important; gap: 16px; max-width: 340px; }
+    .leader-card { width: 100%; padding: 18px; }
+    .leader-flag { font-size: 3rem; }
+    .leader-name { font-size: 1rem; }
+
+    /* -- Briefing -- */
+    .briefing-container { padding: 20px 16px; }
+    .classified-stamp { font-size: 0.9rem; padding: 6px 16px; }
+    .briefing-text { font-size: 0.9rem; padding: 12px; max-height: 55vh; }
+
+    /* -- How To Play -- */
+    .howto-grid { grid-template-columns: 1fr !important; gap: 12px; }
+    .howto-card h3 { font-size: 0.9rem; }
+    .howto-card p { font-size: 0.8rem; }
+
+    /* -- Topbar -- */
+    .topbar {
+        flex-wrap: wrap; height: auto; padding: 8px 12px; gap: 4px;
+    }
+    .topbar-left { order: 1; flex: 1; min-width: 0; }
+    .topbar-flag { font-size: 1.6rem; }
+    .topbar-title { font-size: 0.8rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px; }
+    .topbar-center { order: 2; text-align: right; }
+    .topbar-date { font-size: 0.9rem; }
+    .topbar-turn { font-size: 0.7rem; }
+    .topbar-right {
+        order: 3; width: 100%; justify-content: space-around;
+        gap: 8px; padding-top: 6px;
+        border-top: 1px solid var(--border-color);
+        margin-top: 4px;
+    }
+    .topbar-stat { font-size: 1rem; }
+
+    /* -- News Ticker -- */
+    .news-ticker { height: 36px; }
+    .ticker-label { font-size: 0.8rem; padding: 0 10px; }
+    .ticker-content { font-size: 0.85rem; }
+
+    /* -- Game Layout: bottom nav instead of sidebar -- */
+    .game-layout { flex-direction: column; }
+
+    .game-nav {
+        width: 100%; height: auto;
+        flex-direction: row; overflow-x: auto;
+        border-right: none; border-top: 2px solid var(--border-color);
+        order: 2; /* Push nav to bottom */
+        padding: 4px 0;
+        position: fixed; bottom: 0; left: 0; right: 0;
+        z-index: 100;
+        background: var(--bg-panel);
+        justify-content: space-around;
+        -webkit-overflow-scrolling: touch;
+    }
+    .nav-btn {
+        width: auto; min-width: 48px; padding: 6px 4px; margin: 0 1px;
+        flex-shrink: 0;
+    }
+    .nav-icon { font-size: 1.2rem; }
+    .nav-label { font-size: 0.55rem; white-space: nowrap; }
+    .nav-spacer { display: none; }
+    .end-turn-btn { order: 10; }
+
+    /* -- Game Content -- */
+    .game-content {
+        flex: 1; padding: 12px 10px;
+        padding-bottom: 70px; /* Space for bottom nav */
+        order: 1;
+    }
+    .tab-content h2 { font-size: 1rem; margin-bottom: 12px; }
+
+    /* -- Overview -- */
+    .overview-grid { grid-template-columns: 1fr !important; gap: 12px; }
+    .map-container { min-height: 280px; padding: 12px; }
+    .map-country { padding: 5px 8px; }
+    .map-country .mc-flag { font-size: 1.2rem; }
+    .map-country .mc-name { font-size: 0.6rem; }
+    .relations-summary { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .rel-card { padding: 8px; }
+    .rel-card .country-flag { font-size: 1.5rem; }
+    .rel-card .country-name { font-size: 0.75rem; }
+
+    /* -- Diplomacy -- */
+    .diplo-card { flex-direction: column; text-align: center; gap: 10px; padding: 12px; }
+    .diplo-flag { font-size: 2rem; }
+    .diplo-actions { justify-content: center; }
+    .btn-action { padding: 10px 14px; font-size: 0.8rem; min-height: 44px; }
+
+    /* -- Military -- */
+    .military-layout { grid-template-columns: 1fr !important; gap: 12px; }
+    .buy-row { flex-wrap: wrap; gap: 6px; }
+    .buy-item { flex-basis: 100%; }
+    .buy-cost { margin: 0; }
+
+    /* -- Intelligence -- */
+    .intel-op { padding: 12px; }
+    .intel-op h4 { font-size: 0.95rem; }
+
+    /* -- Budget -- */
+    .budget-slider { width: 100%; }
+    .budget-row { flex-wrap: wrap; gap: 4px; }
+
+    /* -- Domestic -- */
+    .domestic-stat { flex-wrap: wrap; gap: 8px; padding: 10px; }
+    .domestic-bar { width: 100%; order: 3; }
+
+    /* -- Event Popup -- */
+    .event-popup { max-width: 95%; border-radius: 8px; }
+    .event-header { padding: 14px; font-size: 0.95rem; }
+    .event-body { padding: 14px; font-size: 0.9rem; }
+    .event-choices { padding: 12px; flex-direction: column; }
+    .event-choices .btn-action { width: 100%; min-height: 48px; font-size: 0.9rem; }
+
+    /* -- Game Over -- */
+    .gameover-container { padding: 20px; }
+    .gameover-container h1 { font-size: 2rem; }
+
+    /* -- Panels -- */
+    .panel { padding: 12px; }
+
+    /* -- Touch-friendly: larger tap targets -- */
+    .btn-secondary { padding: 14px 28px; }
+    .nav-btn { min-height: 48px; }
+
+    /* -- Scrollbar (hide on mobile) -- */
+    ::-webkit-scrollbar { width: 3px; }
+
+    /* -- Notifications -- */
+    .showNotification-fix { max-width: 90vw !important; font-size: 0.85rem !important; }
+}
+
+/* ====== SMALL MOBILE (max-width: 380px) ====== */
+@media (max-width: 380px) {
+    .title-glitch { font-size: 2.4rem; }
+    .title-year { font-size: 1.6rem; }
+    .title-subtitle { font-size: 0.75rem; }
+    .topbar-stat { font-size: 0.85rem; }
+    .relations-summary { grid-template-columns: repeat(2, 1fr); }
+    .nav-label { display: none; } /* Icon-only nav on very small screens */
+    .nav-btn { min-width: 40px; padding: 8px 2px; }
 }
